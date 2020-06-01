@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void swaper(int &xp, int &yp)
+void swaper(int& xp, int& yp)
 {
 	int temp = xp;
 	xp = yp;
@@ -44,7 +44,7 @@ struct ordenamiento
 
 	void bubbleSort();
 	void cocktailSort();
-	void countingSort(vector <int>& arr);
+	void countingSort();
 	void imprimir();
 };
 
@@ -83,7 +83,7 @@ void ordenamiento<m_traits>::cocktailSort()
 		swapped = false;
 
 		for (int i = start; i < end; ++i) {
-			if (cmp(arr[i] , arr[i + 1])) {
+			if (cmp(arr[i], arr[i + 1])) {
 				swaper(arr[i], arr[i + 1]);
 				swapped = true;
 			}
@@ -107,28 +107,29 @@ void ordenamiento<m_traits>::cocktailSort()
 }
 
 template<typename m_traits>
-void ordenamiento<m_traits>::countingSort(vector <int>& arr)
-
+void ordenamiento<m_traits>::countingSort()
 {
-	int max = *max_element(arr.begin(), arr.end());
-	int min = *min_element(arr.begin(), arr.end());
-	int range = max - min + 1;
+	int i, j, k;
+	int idx = 0;
+	int min, max;
 
-	vector<int> count(range), output(arr.size());
-	for (int i = 0; i < arr.size(); i++)
-		count[arr[i] - min]++;
-
-	for (int i = 1; i < count.size(); i++)
-		count[i] += count[i - 1];
-
-	for (int i = arr.size() - 1; i >= 0; i--)
-	{
-		output[count[arr[i] - min] - 1] = arr[i];
-		count[arr[i] - min]--;
+	min = max = arr[0];
+	for (i = 1; i < n; i++) {
+		min = (arr[i] < min) ? arr[i] : min;
+		max = (arr[i] > max) ? arr[i] : max;
 	}
 
-	for (int i = 0; i < arr.size(); i++)
-		arr[i] = output[i];
+	k = max - min + 1;
+	/* creates k buckets */
+	int* B = new int[k];
+	for (i = 0; i < k; i++) B[i] = 0;
+
+	for (i = 0; i < n; i++) B[arr[i] - min]++;
+	for (i = min; i <= max; i++)
+		for (j = 0; j < B[i - min]; j++) arr[idx++] = i;
+
+	
+	delete[] B;
 }
 
 template<typename m_traits>
@@ -144,7 +145,7 @@ void ordenamiento<m_traits>::imprimir()
 struct m_traits
 {
 	typedef int T;
-	typedef functorMenor<T> F;
+	typedef functorMayor<T> F;
 };
 
 int main()

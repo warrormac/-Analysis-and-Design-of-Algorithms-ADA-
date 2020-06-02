@@ -1,10 +1,25 @@
 #include <iostream>
-#include <vector>
-#include <algorithm> 
+#include <time.h>
 
 using namespace std;
 
 
+template <class T>
+void generadorNumeros(T* arr, T tam)
+{
+	for (auto i = 0; i < tam; i++)
+	{
+		*(arr + i) = rand() % 100000000;
+	}
+
+
+}
+void swaper(int* xp, int* yp)
+{
+	int temp = *xp;
+	*xp = *yp;
+	*yp = temp;
+}
 
 template<typename T>
 struct functorMayor
@@ -30,19 +45,19 @@ struct ordenamiento
 	typedef typename m_traits::T T;
 	typedef typename m_traits::F F;
 
-	T arr;
+	T* arr;
 	int n;
 	F cmp;
 
-	ordenamiento(vector<int>&, int);
+	ordenamiento(T*, int);
 	~ordenamiento();
 
-	void countingSort();
+	void shellSort();
 	void imprimir();
 };
 
 template<typename m_traits>
-ordenamiento<m_traits>::ordenamiento(vector<int>& arr, int n)
+ordenamiento<m_traits>::ordenamiento(T* arr, int n)
 {
 	this->arr = arr;
 	this->n = n;
@@ -56,40 +71,39 @@ ordenamiento<m_traits>::~ordenamiento()
 }
 
 template<typename m_traits>
-void ordenamiento<m_traits>::countingSort()
+void ordenamiento<m_traits>::shellSort()
 {
-    bool swapped = true;
-    int start = 0;
-    int end = n - 1;
+	bool swapped = true;
+	int start = 0;
+	int end = n - 1;
 
-    while (swapped) {
+	while (swapped) {
+		swapped = false;
 
-        swapped = false;
+		for (int i = start; i < end; ++i) {
+			if (cmp(arr[i], arr[i + 1])) {
+				swap(arr[i], arr[i + 1]);
+				swapped = true;
+			}
+		}
 
-        for (int i = start; i < end; ++i) {
-            if (arr.at(i) > arr.at(i + 1)) {
-                swap(arr.at(i), arr.at(i + 1));
-                swapped = true;
-            }
-        }
+		if (!swapped)
+			break;
 
-        if (!swapped)
-            break;
+		swapped = false;
 
-        swapped = false;
+		--end;
 
-        --end;
-
-        for (int i = end - 1; i >= start; --i) {
-            if (arr.at(i) > arr.at(i + 1)) {
-                swap(arr.at(i), arr.at(i + 1));
-                swapped = true;
-            }
-        }
-
-        ++start;
-    }
+		for (int i = end - 1; i >= start; --i) {
+			if (cmp(arr[i], arr[i + 1])) {
+				swap(arr[i], arr[i + 1]);
+				swapped = true;
+			}
+		}
+		++start;
+	}
 }
+
 
 
 template<typename m_traits>
@@ -97,29 +111,41 @@ void ordenamiento<m_traits>::imprimir()
 {
 	for (int i = 0; i < n; i++)
 	{
-		cout << arr.at(i) << " -> ";
+		cout << *(arr + i) << " -> ";
 	}
 	cout << "//" << endl;
 }
 
 struct m_traits
 {
-	typedef vector<int> T;
-	typedef functorMenor<T> F;
+	typedef int T;
+	typedef functorMayor<T> F;
 };
 
 int main()
 {
-	vector<int> arr = { 9,5,3,1,8,7,10,2,6,4 };
-	int n = 10;
+	clock_t inicio;
+	float duracion;
+	int n = 50000000;
+
+	int* arr = NULL;
+	arr = new int[n];
+	generadorNumeros(arr, n);
 
 	ordenamiento<m_traits> orden(arr, n);
-	cout << "desordenado" << endl;
-	orden.imprimir();
+	//cout << "desordenado" << endl;
+	//orden.imprimir();
+	cout<<"sorting... \n";
+	//cout << "ordenado" << endl;
+	inicio = clock();
+	orden.shellSort();
 
-	cout << "ordenado" << endl;
-	orden.countingSort();
-	orden.imprimir();
+	cout << "\n";
+	duracion = (clock() - inicio) / (float)CLOCKS_PER_SEC;
+	cout << " Tiempo :" << duracion << endl;
+	cout << "-------------------------------------" << endl;
+
+	//orden.imprimir();
 
 	return 0;
 }

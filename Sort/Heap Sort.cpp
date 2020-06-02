@@ -78,11 +78,11 @@ void ordenamiento<m_traits>::heapify(int arr[], int n, int i)
 	int r = 2 * i + 2; // right = 2*i + 2 
 
 	// If left child is larger than root 
-	if (l < n && arr[l] > arr[largest])
+	if (l < n && cmp(arr[l] , arr[largest]))
 		largest = l;
 
 	// If right child is larger than largest so far 
-	if (r < n && arr[r] > arr[largest])
+	if (r < n && cmp(arr[r] , arr[largest]))
 		largest = r;
 
 	// If largest is not root 
@@ -126,14 +126,14 @@ void ordenamiento<m_traits>::imprimir()
 struct m_traits
 {
 	typedef int T;
-	typedef functorMayor<T> F;
+	typedef functorMenor<T> F;
 };
 
 int main()
 {
 	clock_t inicio;
 	float duracion;
-	int n = 50000000;
+	int n = 1000000;
 
 	int* arr = NULL;
 	arr = new int[n];

@@ -1,10 +1,25 @@
 #include <iostream>
-#include <vector>
-#include <algorithm> 
+#include <time.h>
 
 using namespace std;
 
 
+template <class T>
+void generadorNumeros(T* arr, T tam)
+{
+	for (auto i = 0; i < tam; i++)
+	{
+		*(arr + i) = rand() % 100000000;
+	}
+
+
+}
+void swaper(int* xp, int* yp)
+{
+	int temp = *xp;
+	*xp = *yp;
+	*yp = temp;
+}
 
 template<typename T>
 struct functorMayor
@@ -30,19 +45,19 @@ struct ordenamiento
 	typedef typename m_traits::T T;
 	typedef typename m_traits::F F;
 
-	T arr;
+	T* arr;
 	int n;
 	F cmp;
 
-	ordenamiento(vector<int>&, int);
+	ordenamiento(T*, int);
 	~ordenamiento();
-	void heapify(vector<int>&, int,int);
+	void heapify(int arr[], int n, int i);
 	void heapSort();
 	void imprimir();
 };
 
 template<typename m_traits>
-ordenamiento<m_traits>::ordenamiento(vector<int>& arr, int n)
+ordenamiento<m_traits>::ordenamiento(T* arr, int n)
 {
 	this->arr = arr;
 	this->n = n;
@@ -56,18 +71,18 @@ ordenamiento<m_traits>::~ordenamiento()
 }
 
 template<typename m_traits>
-void ordenamiento<m_traits>::heapify(vector<int> &arr, int n, int i)
+void ordenamiento<m_traits>::heapify(int arr[], int n, int i)
 {
 	int largest = i; // Initialize largest as root 
 	int l = 2 * i + 1; // left = 2*i + 1 
 	int r = 2 * i + 2; // right = 2*i + 2 
 
 	// If left child is larger than root 
-	if (l < n && arr[l] < arr[largest])
+	if (l < n && arr[l] > arr[largest])
 		largest = l;
 
 	// If right child is larger than largest so far 
-	if (r < n && arr[r] < arr[largest])
+	if (r < n && arr[r] > arr[largest])
 		largest = r;
 
 	// If largest is not root 
@@ -79,7 +94,6 @@ void ordenamiento<m_traits>::heapify(vector<int> &arr, int n, int i)
 		heapify(arr, n, largest);
 	}
 }
-
 template<typename m_traits>
 void ordenamiento<m_traits>::heapSort()
 {
@@ -98,34 +112,47 @@ void ordenamiento<m_traits>::heapSort()
 }
 
 
+
 template<typename m_traits>
 void ordenamiento<m_traits>::imprimir()
 {
 	for (int i = 0; i < n; i++)
 	{
-		cout << arr.at(i) << " -> ";
+		cout << *(arr + i) << " -> ";
 	}
 	cout << "//" << endl;
 }
 
 struct m_traits
 {
-	typedef vector<int> T;
+	typedef int T;
 	typedef functorMayor<T> F;
 };
 
 int main()
 {
-	vector<int> arr = { 9,5,3,1,8,7,10,2,6,4 };
-	int n = 10;
+	clock_t inicio;
+	float duracion;
+	int n = 50000000;
+
+	int* arr = NULL;
+	arr = new int[n];
+	generadorNumeros(arr, n);
 
 	ordenamiento<m_traits> orden(arr, n);
-	cout << "desordenado" << endl;
-	orden.imprimir();
-
-	cout << "ordenado" << endl;
+	//cout << "desordenado" << endl;
+	//orden.imprimir();
+	cout << "sorting... \n";
+	//cout << "ordenado" << endl;
+	inicio = clock();
 	orden.heapSort();
-	orden.imprimir();
+
+	cout << "\n";
+	duracion = (clock() - inicio) / (float)CLOCKS_PER_SEC;
+	cout << " Tiempo :" << duracion << endl;
+	cout << "-------------------------------------" << endl;
+
+	//orden.imprimir();
 
 	return 0;
 }

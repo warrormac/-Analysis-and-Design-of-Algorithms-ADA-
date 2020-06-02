@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm> 
+#include <time.h>
 
 using namespace std;
 
@@ -128,7 +129,7 @@ void ordenamiento<m_traits>::countingSort()
 	for (i = min; i <= max; i++)
 		for (j = 0; j < B[i - min]; j++) arr[idx++] = i;
 
-	
+
 	delete[] B;
 }
 
@@ -150,6 +151,8 @@ struct m_traits
 
 int main()
 {
+	clock_t inicio;
+	float duracion;
 	int arr[10] = { 9,5,3,1,8,7,10,2,6,4 };
 	int n = 10;
 
@@ -157,9 +160,14 @@ int main()
 	cout << "desordenado" << endl;
 	orden.imprimir();
 
+	
 	cout << "ordenado" << endl;
+	inicio = clock();
 	orden.countingSort();
-	orden.imprimir();
+	duracion = (clock() - inicio) / (float)CLOCKS_PER_SEC;
+	cout << " Tiempo :" << duracion << endl;
+	cout << "-------------------------------------" << endl;
+	//orden.imprimir();
 
 	return 0;
 }

@@ -52,7 +52,7 @@ struct ordenamiento
 	ordenamiento(T*, int);
 	~ordenamiento();
 
-	void shellSort();
+	void countingSort();
 	void imprimir();
 };
 
@@ -71,7 +71,7 @@ ordenamiento<m_traits>::~ordenamiento()
 }
 
 template<typename m_traits>
-void ordenamiento<m_traits>::shellSort()
+void ordenamiento<m_traits>::countingSort()
 {
 	int i, j, k;
 	int idx = 0;
@@ -118,7 +118,7 @@ int main()
 {
 	clock_t inicio;
 	float duracion;
-	int n = 50000000;
+	int n = 1000;
 
 	int* arr = NULL;
 	arr = new int[n];
@@ -127,10 +127,10 @@ int main()
 	ordenamiento<m_traits> orden(arr, n);
 	//cout << "desordenado" << endl;
 	//orden.imprimir();
-	cout<<"sorting... \n";
+	cout << "sorting... \n";
 	//cout << "ordenado" << endl;
 	inicio = clock();
-	orden.shellSort();
+	orden.countingSort();
 
 	cout << "\n";
 	duracion = (clock() - inicio) / (float)CLOCKS_PER_SEC;

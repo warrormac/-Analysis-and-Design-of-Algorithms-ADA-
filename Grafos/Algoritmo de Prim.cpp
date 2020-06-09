@@ -23,12 +23,12 @@ int menorValor(int key[], bool mstSet[])
             min = key[v];
             indx = v;
         }
-            
+
 
     return indx;
 }
 
-void primMST(int graph[V][V])
+void prim(int graph[V][V])
 {
     int node[V], key[V];
     bool arr[V];
@@ -38,10 +38,10 @@ void primMST(int graph[V][V])
         key[i] = INT_MAX;
         arr[i] = 0;
     }
-        
+
 
     key[0] = 0;
-    node[0] = -1; 
+    node[0] = -1;
 
     for (int count = 0; count < V - 1; count++)
     {
@@ -54,7 +54,7 @@ void primMST(int graph[V][V])
                 node[v] = u;
                 key[v] = graph[u][v];
             }
-                
+
     }
 
     print(node, graph);
@@ -64,7 +64,9 @@ void primMST(int graph[V][V])
 int main()
 
 {
-                       // 0  1   2   3   4   5   6   7   8 
+    cout << "tabla de su grafo: \n";
+  
+                        // 0  1   2   3   4   5   6   7   8 
     int graph[V][V] = { { 0, 4,  0,  0,  0,  0,  0,  7,  0 }, //0
                         { 4, 0,  8,  0,  0,  0,  0,  11, 0 }, //1
                         { 0, 1,  0,  7,  0,  4,  0,  0,  2 }, //2
@@ -73,9 +75,16 @@ int main()
                         { 0, 0,  4,  14, 10, 0,  2,  0,  0 }, //5
                         { 0, 0,  0,  0,  0,  2,  0,  1,  8 }, //6
                         { 8,11,  0,  0,  0,  0,  1,  0,  7 }, //7
-                        { 0, 0,  2,  0,  0,  0,  6,  7,  0 }};//8
+                        { 0, 0,  2,  0,  0,  0,  6,  7,  0 } };//8
+    for (int i = 0; i < V; i++)
+    {
+        for (int j = 0; j < V; j++)
+        {
+            cout <<"\t"<< graph[i][j];
 
-    primMST(graph);
+        }
+        cout << endl;
+    }
+    prim(graph);
 
 }
-
